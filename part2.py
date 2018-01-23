@@ -4,6 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import KFold
 from sfs import sfs
+from sklearn import tree
 
 
 numOfSplits = 4
@@ -29,7 +30,7 @@ classification_test = classification[examples_index:]
 knn_simple = KNeighborsClassifier(n_neighbors=5)
 knn_simple.fit(examples_train, classification_train)
 
-print("accuracy for simple knn: ", accuracy_score(classification_test, knn_simple.predict(examples_test)))
+print(accuracy_score(classification_test, knn_simple.predict(examples_test)))
 
 
 # score function for sfs
@@ -58,9 +59,23 @@ selected_features = sfs(examples_train, classification_train, 8, knn_features, s
 
 knn_features.fit(examples_train[:,selected_features], classification_train)
 
-print("accuracy for knn with feature selection: ",
-      accuracy_score(classification_test, knn_features.predict(examples_test[:,selected_features])))
+print(accuracy_score(classification_test, knn_features.predict(examples_test[:,selected_features])))
 
 
 
 
+# classifing with tree without pruning
+
+
+totalAccuracy = 0
+totalConfusion = np.zeros((2,2))
+
+# train the tree on train set
+estimator = tree.DecisionTreeClassifier(criterion="entropy")
+estimatorEmbedded = tree.DecisionTreeClassifier(criterion="entropy", min_samples_leaf= 20)
+estimator.fit(examples_train, classification_train)
+estimatorEmbedded.fit(examples_train, classification_train)
+# test the tree on validation set
+
+print(accuracy_score(classification_test, estimator.predict(examples_test)))
+print(accuracy_score(classification_test, estimatorEmbedded.predict(examples_test)))
