@@ -38,7 +38,7 @@ def scoreForKNN(knn, examples, classification):
     numOfSplits = 4
     totalAccuracy = 0
 
-    kf = KFold(n_splits=numOfSplits, shuffle=True)
+    kf = KFold(n_splits=numOfSplits)
     for train_index, valid_index in kf.split(examples):
         # split the data to train set and validation set:
         examples_train, examples_valid = examples[train_index], examples[valid_index]

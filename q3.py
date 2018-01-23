@@ -5,14 +5,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold
 from sklearn import tree
 
-numOfSplits = 4 # TODO change
-# totalAccuracy = 0
-# totalConfusion = np.zeros((2,2))
-#
-# ### average for shuflle ###
-# avgFactor = 10
+numOfSplits = 4
 
-
+# read data
 data = pd.read_csv("flare.csv")
 
 data = data.values
@@ -21,17 +16,13 @@ classification = data[:, 32]
 classification = classification.astype(bool)
 
 
-
-# for minSamples in range(2,31,7):
-#     avgSum = 0
-#     avgConfusion = np.zeros((2, 2))
-# for i in range(avgFactor): # with shuffle
 totalOverfitTrainAccuracy = 0
 totalOverfitTestAccuracy = 0
 
 totalUnderfitTrianAccuracy = 0
 totalUnderfitTestAccuracy = 0
 
+# run kfold on trees
 kf = KFold(n_splits=numOfSplits, shuffle=True)
 for train_index, test_index in kf.split(features):
     # split the data to train set and validation set:
@@ -52,18 +43,13 @@ for train_index, test_index in kf.split(features):
     totalUnderfitTrianAccuracy += accuracy_score(classification_train, underfitEstimator.predict(features_train))
     totalUnderfitTestAccuracy += accuracy_score(classification_test, underfitEstimator.predict(features_test))
 
-
+# calculate accuracies
 totalOverfitTrainAccuracy = totalOverfitTrainAccuracy / numOfSplits
 totalOverfitTestAccuracy = totalOverfitTestAccuracy / numOfSplits
 
 totalUnderfitTrianAccuracy = totalUnderfitTrianAccuracy / numOfSplits
 totalUnderfitTestAccuracy = totalUnderfitTestAccuracy / numOfSplits
-    # avgSum += totalAccuracy
-    # avgConfusion += totalConfusion
-# print("for Overfit estimator: train accuracy is: ",totalOverfitTrainAccuracy,
-#       " test accuracy is: ", totalOverfitTestAccuracy)
-# print("for Underfit estimator: train accuracy is: ",totalUnderfitTrianAccuracy,
-#       " test accuracy is: ", totalUnderfitTestAccuracy)
+
 print(totalOverfitTrainAccuracy)
 print(totalUnderfitTrianAccuracy)
 

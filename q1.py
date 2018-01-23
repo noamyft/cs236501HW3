@@ -15,12 +15,10 @@ features = data[:,0:32]
 classification = data[:, 32]
 classification = classification.astype(bool)
 
-
-
-
 totalAccuracy = 0
 totalConfusion = np.zeros((2,2))
 
+# run kfold on trees
 kf = KFold(n_splits=numOfSplits, shuffle=True)
 for train_index, test_index in kf.split(features):
     # split the data to train set and validation set:
@@ -34,6 +32,7 @@ for train_index, test_index in kf.split(features):
     totalAccuracy += accuracy_score(classification_test, estimator.predict(features_test))
     totalConfusion += confusion_matrix(classification_test, estimator.predict(features_test))
 
+# calculate accuracy and confusion matrix
 totalAccuracy = totalAccuracy / numOfSplits
 totalConfusion = np.rint(totalConfusion).astype(int)
 
