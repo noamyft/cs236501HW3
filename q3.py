@@ -31,7 +31,7 @@ for train_index, test_index in kf.split(features):
 
     # train the tree on train set
     overfitEstimator = tree.DecisionTreeClassifier(criterion="entropy")
-    underfitEstimator = tree.DecisionTreeClassifier(criterion="entropy", max_depth = 1,  min_samples_split = 0.7, max_features = 1)
+    underfitEstimator = tree.DecisionTreeClassifier(criterion="entropy", max_depth = 1, max_features = 1)
 
     overfitEstimator.fit(features_train, classification_train)
     underfitEstimator.fit(features_train, classification_train)
